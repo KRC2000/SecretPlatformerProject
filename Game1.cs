@@ -15,6 +15,8 @@ namespace Project
 {
     public class Game1 : Game
     {
+        private static SpriteFont DefaultFont;
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private OrthographicCamera _camera;
@@ -24,13 +26,19 @@ namespace Project
 
         private Player pl;
 
-
+        Skeleton2D skeleton = new Skeleton2D();
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
+            Vector2 vec = new Vector2(3, 0);
+            Vector2 vec_rot = vec.Rotate(45f *  (float)Math.PI / 180f);
+            Point p = vec_rot.ToPoint();
+            // Vector2 vec_rot = new Vector2();;
+            // vec_rot.X = Math.Cos(90 * PI/180);
+            // vec_rot.Y = Math.Sin(90 * PI/180);
         }
 
         protected override void Initialize()
@@ -48,7 +56,12 @@ namespace Project
 
             _camera = new OrthographicCamera(GraphicsDevice);
             _camera.Zoom = 3;
+            _camera.LookAt(new Vector2(0, 0));
             pl = new Player();
+
+
+            skeleton.AddBone("bone1", new Vector2(), -45, 20);
+            skeleton.AddBone("bone2", "bone1", new Vector2(20, 0), 0, 20);
 
             base.Initialize();
         }
@@ -58,6 +71,7 @@ namespace Project
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             DebugUI.Font = Content.Load<SpriteFont>("Font1");
+            DefaultFont = Content.Load<SpriteFont>("Font1");
 
             pl.LoadContent(Content);
 
@@ -84,7 +98,7 @@ namespace Project
             map.Update();
             InteractionManager.ActorMap_collsion(pl, map, gameTime);
 
-            _camera.LookAt(pl.Transform.Position);
+            //_camera.LookAt(pl.Transform.Position);
             //_camera.ZoomOut(0.01f);
 
             base.Update(gameTime);
@@ -101,6 +115,7 @@ namespace Project
 
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, _camera.GetViewMatrix());
             
+            skeleton.Draw(_spriteBatch, DefaultFont);
 
             _spriteBatch.End();
 

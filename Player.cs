@@ -58,9 +58,9 @@ namespace Project
 
             //if (!IsAirborne) batch.Draw(Texture, new Vector2(Transform.Position.X, (float)Math.Ceiling(Transform.Position.Y)), Color.White);
             //else batch.Draw(Texture, Transform.Position, Color.White);
-            batch.Draw(fb_legs.Texture, Transform.Position + legs_offset.ToVector2(), fb_legs.GetSourceRectangle(), Color.White, 0f, new Vector2(), new Vector2(1, 1), anim_legs_walk.FlipBook.GetSpriteEffects(), 0);
             batch.Draw(fb_torso.Texture, Transform.Position + torso_offset.ToVector2(), fb_torso.GetSourceRectangle(), Color.White, 0f, new Vector2(), new Vector2(1, 1), anim_torso_idle.FlipBook.GetSpriteEffects(), 0);
-            batch.DrawRectangle(new RectangleF(Transform.Position.X, Transform.Position.Y, Size.X, Size.Y), Color.Bisque, 1f, 0);
+            batch.Draw(fb_legs.Texture, Transform.Position + legs_offset.ToVector2(), fb_legs.GetSourceRectangle(), Color.White, 0f, new Vector2(), new Vector2(1, 1), anim_legs_walk.FlipBook.GetSpriteEffects(), 0);
+            batch.DrawRectangle(new RectangleF(Transform.Position.X, Transform.Position.Y, Size.X, Size.Y), new Color(100, 100, 100, 100), 1f, 0);
 
 
             batch.End();
@@ -79,7 +79,7 @@ namespace Project
         private Animation anim_torso_idle;
 
         private Point legs_offset = new Point(0, 39);
-        private Point torso_offset = new Point(0, 20);
+        private Point torso_offset = new Point(0, 23);
 
         private void WalkRight(GameTime gameTime)
         {
