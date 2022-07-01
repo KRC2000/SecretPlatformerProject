@@ -14,7 +14,7 @@ namespace Project
        
 
         public float Gravity { get; private set; } = 140;
-        public float Friction { get; private set; } = 600f;
+        public float Friction { get; private set; } = 400f;
         public List<Chunk> Chunks;
 
         public Map(){

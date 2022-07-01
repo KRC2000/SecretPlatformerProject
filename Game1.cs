@@ -47,7 +47,7 @@ namespace Project
             SetFrameLimit(0);
 
             _camera = new OrthographicCamera(GraphicsDevice);
-            _camera.Zoom = 1;
+            _camera.Zoom = 3;
             pl = new Player();
 
             base.Initialize();
