@@ -11,7 +11,7 @@ namespace Project
     {
         public Bone2D ParentBone { get; private set; }
         public List<Bone2D> ChildBones { get; private set; } = new List<Bone2D>();
-        public Vector2 Position { get; private set; }
+        public Vector2 LocalPosition { get; private set; }
         public float Rotation { get; set; }
         public Vector2 Vector { get; private set; }
         public float Lenght { get; private set; }
@@ -19,8 +19,9 @@ namespace Project
 
         public Bone2D(string name, Vector2 position, float rotation, float lenght, Bone2D parentBone = null)
         {
-            Name = name; Position = position; Rotation = rotation; Lenght = lenght;
+            Name = name; LocalPosition = position; Rotation = rotation; Lenght = lenght;
             ParentBone = parentBone;
+            if (parentBone != null) parentBone.ChildBones.Add(this);
             UpdateVector();
         }
 
@@ -30,7 +31,7 @@ namespace Project
             UpdateVector();
             if (ParentBone != null)
             {
-                Position = ParentBone.Position + ParentBone.Vector; 
+                LocalPosition = ParentBone.LocalPosition + ParentBone.Vector; 
             }
 
             foreach (Bone2D childBone in ChildBones)
@@ -46,7 +47,7 @@ namespace Project
 
         public void Draw(SpriteBatch batch)
         {
-            batch.DrawLine(Position, Position + Vector, Color.BlueViolet, 3, 0);
+            batch.DrawLine(LocalPosition, LocalPosition + Vector, Color.BlueViolet, 3, 0);
         }
     }
 }

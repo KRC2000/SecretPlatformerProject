@@ -9,6 +9,7 @@ namespace Project
     {
         public Texture2D Texture { get; private set; }
         public Point FrameSize { get; private set; }
+        public Vector2 FrameOrigin { get; private set; }
         public bool FlipHorizontally { get; set; } = false;
         public bool FlipVertically { get; set; } = false;
 
@@ -30,12 +31,13 @@ namespace Project
         }
 
 
-        public FlipBook(Texture2D texture, Point frameSize, int frameCount, bool flipHorizontally = false)
+        public FlipBook(Texture2D texture, Point frameSize, int frameCount, Vector2 frameOrigin, bool flipHorizontally = false)
         {
             Texture = texture;
             FrameSize = frameSize;
             FrameCount = frameCount;
             FlipHorizontally = flipHorizontally;
+            FrameOrigin = frameOrigin;
         }
 
         public Rectangle GetSourceRectangle()

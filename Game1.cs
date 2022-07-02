@@ -26,19 +26,11 @@ namespace Project
 
         private Player pl;
 
-        Skeleton2D skeleton = new Skeleton2D();
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
-            Vector2 vec = new Vector2(3, 0);
-            Vector2 vec_rot = vec.Rotate(45f *  (float)Math.PI / 180f);
-            Point p = vec_rot.ToPoint();
-            // Vector2 vec_rot = new Vector2();;
-            // vec_rot.X = Math.Cos(90 * PI/180);
-            // vec_rot.Y = Math.Sin(90 * PI/180);
         }
 
         protected override void Initialize()
@@ -56,13 +48,8 @@ namespace Project
 
             _camera = new OrthographicCamera(GraphicsDevice);
             _camera.Zoom = 3;
-            _camera.LookAt(new Vector2(0, 0));
+
             pl = new Player();
-
-
-            skeleton.AddBone("bone1", new Vector2(), -45, 20);
-            skeleton.AddBone("bone2", "bone1", 0, 20);
-            skeleton.AddBone("bone3", "bone2", 120, 50);
 
             base.Initialize();
         }
@@ -80,8 +67,6 @@ namespace Project
             map.AddChunk(Content.Load<Texture2D>("map1"), new Point(800, 0));
             map.AddChunk(Content.Load<Texture2D>("map2"), new Point(1600, 0));
 
-            //anim.PlayFromStart();
-
             // TODO: use this.Content to load your game content here
         }
 
@@ -94,16 +79,11 @@ namespace Project
 
             // TODO: Add your update logic here
 
-            if (InputManager.GetState().IsKeyDown(Keys.Left)) skeleton.RotateBone("bone1", 50 * gameTime.GetElapsedSeconds());
-            if (InputManager.GetState().IsKeyDown(Keys.Right)) skeleton.RotateBone("bone2", -50 * gameTime.GetElapsedSeconds());
-
-
             pl.Update(gameTime);
             map.Update();
             InteractionManager.ActorMap_collsion(pl, map, gameTime);
 
-            //_camera.LookAt(pl.Transform.Position);
-            //_camera.ZoomOut(0.01f);
+            _camera.LookAt(pl.Transform.Position);
 
             base.Update(gameTime);
         }
@@ -118,8 +98,6 @@ namespace Project
             pl.Draw(_spriteBatch, _camera);
 
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, _camera.GetViewMatrix());
-            
-            skeleton.Draw(_spriteBatch, DefaultFont);
 
             _spriteBatch.End();
 
