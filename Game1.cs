@@ -61,7 +61,8 @@ namespace Project
 
 
             skeleton.AddBone("bone1", new Vector2(), -45, 20);
-            skeleton.AddBone("bone2", "bone1", new Vector2(20, 0), 0, 20);
+            skeleton.AddBone("bone2", "bone1", 0, 20);
+            skeleton.AddBone("bone3", "bone2", 120, 50);
 
             base.Initialize();
         }
@@ -92,6 +93,9 @@ namespace Project
                 Exit();
 
             // TODO: Add your update logic here
+
+            if (InputManager.GetState().IsKeyDown(Keys.Left)) skeleton.RotateBone("bone1", 50 * gameTime.GetElapsedSeconds());
+            if (InputManager.GetState().IsKeyDown(Keys.Right)) skeleton.RotateBone("bone2", -50 * gameTime.GetElapsedSeconds());
 
 
             pl.Update(gameTime);
