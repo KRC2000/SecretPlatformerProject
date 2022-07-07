@@ -32,17 +32,17 @@ namespace Project
             
             body_skel.AddBone("torso", new Vector2(), -90, 18);
             body_skel.AddBone("head", "torso", -90, 7);
-            body_skel.AddBone("heands", "torso", 0, 10);
+            body_skel.AddBone("hands", "torso", 0, 10);
             bone_torso = body_skel.GetBoneByName("torso");
             bone_head = body_skel.GetBoneByName("head"); //bone_head.InheritRotation = false;
-            bone_heands = body_skel.GetBoneByName("heands");
+            bone_hands = body_skel.GetBoneByName("hands");
 
 
             fb_head = new FlipBook(content.Load<Texture2D>("head"), new Point(32, 32), 1, new Vector2(32 / 2, 20));
             fb_torso = new FlipBook(content.Load<Texture2D>("torso_idle"), new Point(32, 32), 2, new Vector2(32 / 2, 25));
             fb_legs = new FlipBook(content.Load<Texture2D>("legs_walk"), new Point(32, 32), 6, new Vector2(32 / 2 , 8));
-            fb_leftHeand = new FlipBook(content.Load<Texture2D>("heand_left"), new Point(32, 32), 1, new Vector2(32 / 2 - 2, 32 / 2));
-            fb_rightHeand = new FlipBook(content.Load<Texture2D>("heand_right"), new Point(32, 32), 1, new Vector2(32 / 2 - 2 , 32 / 2));
+            fb_leftHand = new FlipBook(content.Load<Texture2D>("hand_left"), new Point(32, 32), 1, new Vector2(32 / 2 - 2, 32 / 2));
+            fb_rightHand = new FlipBook(content.Load<Texture2D>("hand_right"), new Point(32, 32), 1, new Vector2(32 / 2 - 2 , 32 / 2));
             
             anim_legs_walk = new Animation(fb_legs);
             anim_torso_idle = new Animation(fb_torso);
@@ -66,7 +66,7 @@ namespace Project
             if (Math.Abs(LookAngle) < 90) body_skel.SetBoneRotation(bone_head, LookAngle-90);
             else body_skel.SetBoneRotation(bone_head, LookAngle-90 + 180);
 
-            body_skel.SetBoneRotation(bone_heands, LookAngle);
+            body_skel.SetBoneRotation(bone_hands, LookAngle);
 
 
 
@@ -86,11 +86,11 @@ namespace Project
         {
             batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetViewMatrix());
 
-            batch.Draw(fb_leftHeand.Texture, body_skel.GetBoneWorldPos(bone_torso) + bone_torso.Vector * 0.8f, fb_leftHeand.GetSourceRectangle(), Color.White, bone_heands.GetDrawRotation(), fb_leftHeand.FrameOrigin , new Vector2(1, 1), fb_leftHeand.GetSpriteEffects(), 0);
+            batch.Draw(fb_leftHand.Texture, body_skel.GetBoneWorldPos(bone_torso) + bone_torso.Vector * 0.8f, fb_leftHand.GetSourceRectangle(), Color.White, bone_hands.GetDrawRotation(), fb_leftHand.FrameOrigin , new Vector2(1, 1), fb_leftHand.GetSpriteEffects(), 0);
             batch.Draw(fb_torso.Texture, body_skel.GetBoneWorldPos(bone_torso), fb_torso.GetSourceRectangle(), Color.White, bone_torso.GetDrawRotation(), fb_torso.FrameOrigin, new Vector2(1, 1), anim_torso_idle.FlipBook.GetSpriteEffects(), 0);
             batch.Draw(fb_legs.Texture, body_skel.GetBoneWorldPos(bone_torso), fb_legs.GetSourceRectangle(), Color.White, 0f, fb_legs.FrameOrigin, new Vector2(1, 1), anim_legs_walk.FlipBook.GetSpriteEffects(), 0);
             batch.Draw(fb_head.Texture, body_skel.GetBoneWorldPos(bone_head), fb_head.GetSourceRectangle(), Color.White, bone_head.GetDrawRotation(), fb_head.FrameOrigin , new Vector2(1, 1), fb_head.GetSpriteEffects(), 0);
-            batch.Draw(fb_rightHeand.Texture, body_skel.GetBoneWorldPos(bone_torso) + bone_torso.Vector * 0.8f, fb_rightHeand.GetSourceRectangle(), Color.White, bone_heands.GetDrawRotation(), fb_rightHeand.FrameOrigin , new Vector2(1, 1), fb_rightHeand.GetSpriteEffects(), 0);
+            batch.Draw(fb_rightHand.Texture, body_skel.GetBoneWorldPos(bone_torso) + bone_torso.Vector * 0.8f, fb_rightHand.GetSourceRectangle(), Color.White, bone_hands.GetDrawRotation(), fb_rightHand.FrameOrigin , new Vector2(1, 1), fb_rightHand.GetSpriteEffects(), 0);
             batch.DrawRectangle(new RectangleF(Transform.Position.X, Transform.Position.Y, Size.X, Size.Y), new Color(100, 100, 100, 100), 1f, 0);
             body_skel.Draw(batch);
 
@@ -105,8 +105,8 @@ namespace Project
         }
 
         private Skeleton2D body_skel;
-        private Bone2D bone_torso, bone_head, bone_heands;
-        private FlipBook fb_legs, fb_torso, fb_head, fb_leftHeand, fb_rightHeand;
+        private Bone2D bone_torso, bone_head, bone_hands;
+        private FlipBook fb_legs, fb_torso, fb_head, fb_leftHand, fb_rightHand;
         private Animation anim_legs_walk;
         private Animation anim_torso_idle;
 
@@ -158,15 +158,15 @@ namespace Project
             {
                 fb_head.FlipHorizontally = true;
                 fb_torso.FlipHorizontally = true;
-                fb_leftHeand.FlipVertically = true;
-                fb_rightHeand.FlipVertically = true;
+                fb_leftHand.FlipVertically = true;
+                fb_rightHand.FlipVertically = true;
             }
             else 
             {
                 fb_head.FlipHorizontally = false;
                 fb_torso.FlipHorizontally = false;
-                fb_leftHeand.FlipVertically = false;
-                fb_rightHeand.FlipVertically = false;
+                fb_leftHand.FlipVertically = false;
+                fb_rightHand.FlipVertically = false;
             }
 
             if (!IsAirborne)
