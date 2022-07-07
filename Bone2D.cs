@@ -11,8 +11,12 @@ namespace Project
     {
         public Bone2D ParentBone { get; private set; }
         public List<Bone2D> ChildBones { get; private set; } = new List<Bone2D>();
+        public bool InheritRotation { get; set; } = true;
         public Vector2 LocalPosition { get; private set; }
+        public Vector2 InitialLocalPosition { get; private set; }
         public float Rotation { get; set; }
+        public float InitialRotation { get; private set; }
+
         public Vector2 Vector { get; private set; }
         public float Lenght { get; private set; }
         public string Name { get; private set; }
@@ -21,6 +25,8 @@ namespace Project
         {
             Name = name; LocalPosition = position; Rotation = rotation; Lenght = lenght;
             ParentBone = parentBone;
+            InitialLocalPosition = LocalPosition;
+            InitialRotation = Rotation;
             if (parentBone != null) parentBone.ChildBones.Add(this);
             UpdateVector();
         }
@@ -36,8 +42,13 @@ namespace Project
 
             foreach (Bone2D childBone in ChildBones)
             {
-                childBone.Rotate(degree);
+                if (childBone.InheritRotation) childBone.Rotate(degree);
             }
+        }
+
+        public float GetDrawRotation()
+        {
+            return MathHelper.ToRadians(Rotation - InitialRotation);
         }
 
         private void UpdateVector()

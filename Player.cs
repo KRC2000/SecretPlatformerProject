@@ -15,9 +15,12 @@ namespace Project
         public float MaxMovementSpeed { get; private set; } = 50;
         public float WalkAcceleration { get; private set; } = 400;
         //public Texture2D Texture;
+        public Vector2 LookVector { get; private set; }
+        public float LookAngle { get; private set; }
         
-        public Player()
+        public Player(OrthographicCamera playerSceneCamera)
         {
+            SceneCamera = playerSceneCamera;
         }
 
         public void LoadContent(ContentManager content)
@@ -31,12 +34,16 @@ namespace Project
             body_skel.AddBone("head", "torso", -90, 7);
             body_skel.AddBone("heands", "torso", 0, 10);
             bone_torso = body_skel.GetBoneByName("torso");
-            bone_head = body_skel.GetBoneByName("head");
+            bone_head = body_skel.GetBoneByName("head"); //bone_head.InheritRotation = false;
             bone_heands = body_skel.GetBoneByName("heands");
 
 
-            fb_legs = new FlipBook(content.Load<Texture2D>("legs_walk"), new Point(32, 32), 6, new Vector2());
+            fb_head = new FlipBook(content.Load<Texture2D>("head"), new Point(32, 32), 1, new Vector2(32 / 2, 20));
             fb_torso = new FlipBook(content.Load<Texture2D>("torso_idle"), new Point(32, 32), 2, new Vector2(32 / 2, 25));
+            fb_legs = new FlipBook(content.Load<Texture2D>("legs_walk"), new Point(32, 32), 6, new Vector2(32 / 2 , 8));
+            fb_leftHeand = new FlipBook(content.Load<Texture2D>("heand_left"), new Point(32, 32), 1, new Vector2(32 / 2 - 2, 32 / 2));
+            fb_rightHeand = new FlipBook(content.Load<Texture2D>("heand_right"), new Point(32, 32), 1, new Vector2(32 / 2 - 2 , 32 / 2));
+            
             anim_legs_walk = new Animation(fb_legs);
             anim_torso_idle = new Animation(fb_torso);
             anim_legs_walk.Speed = 10;
@@ -51,6 +58,18 @@ namespace Project
             //body_skel.Position = Transform.Position;
             body_skel.Position = Transform.Position + new Vector2((float)Size.X/2, 47f);
             
+            Vector2 mousePos = Vector2.Transform(Mouse.GetState().Position.ToVector2(), SceneCamera.GetInverseViewMatrix());
+
+            LookVector = Vector2.Normalize(mousePos - (body_skel.Position + bone_head.LocalPosition));
+            LookAngle = MathHelper.ToDegrees((float)Math.CopySign(Math.Acos(LookVector.X), LookVector.Y));
+
+            if (Math.Abs(LookAngle) < 90) body_skel.SetBoneRotation(bone_head, LookAngle-90);
+            else body_skel.SetBoneRotation(bone_head, LookAngle-90 + 180);
+
+            body_skel.SetBoneRotation(bone_heands, LookAngle);
+
+
+
             if (Keyboard.GetState().IsKeyDown(Keys.D)){
                 WalkRight(gameTime);
             }
@@ -67,11 +86,13 @@ namespace Project
         {
             batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetViewMatrix());
 
-            batch.Draw(fb_torso.Texture, body_skel.Position + bone_torso.LocalPosition, fb_torso.GetSourceRectangle(), Color.White, 0f, fb_torso.FrameOrigin, new Vector2(1, 1), anim_torso_idle.FlipBook.GetSpriteEffects(), 0);
-            batch.Draw(fb_legs.Texture, Transform.Position + legs_offset.ToVector2(), fb_legs.GetSourceRectangle(), Color.White, 0f, new Vector2(), new Vector2(1, 1), anim_legs_walk.FlipBook.GetSpriteEffects(), 0);
+            batch.Draw(fb_leftHeand.Texture, body_skel.GetBoneWorldPos(bone_torso) + bone_torso.Vector * 0.8f, fb_leftHeand.GetSourceRectangle(), Color.White, bone_heands.GetDrawRotation(), fb_leftHeand.FrameOrigin , new Vector2(1, 1), fb_leftHeand.GetSpriteEffects(), 0);
+            batch.Draw(fb_torso.Texture, body_skel.GetBoneWorldPos(bone_torso), fb_torso.GetSourceRectangle(), Color.White, bone_torso.GetDrawRotation(), fb_torso.FrameOrigin, new Vector2(1, 1), anim_torso_idle.FlipBook.GetSpriteEffects(), 0);
+            batch.Draw(fb_legs.Texture, body_skel.GetBoneWorldPos(bone_torso), fb_legs.GetSourceRectangle(), Color.White, 0f, fb_legs.FrameOrigin, new Vector2(1, 1), anim_legs_walk.FlipBook.GetSpriteEffects(), 0);
+            batch.Draw(fb_head.Texture, body_skel.GetBoneWorldPos(bone_head), fb_head.GetSourceRectangle(), Color.White, bone_head.GetDrawRotation(), fb_head.FrameOrigin , new Vector2(1, 1), fb_head.GetSpriteEffects(), 0);
+            batch.Draw(fb_rightHeand.Texture, body_skel.GetBoneWorldPos(bone_torso) + bone_torso.Vector * 0.8f, fb_rightHeand.GetSourceRectangle(), Color.White, bone_heands.GetDrawRotation(), fb_rightHeand.FrameOrigin , new Vector2(1, 1), fb_rightHeand.GetSpriteEffects(), 0);
             batch.DrawRectangle(new RectangleF(Transform.Position.X, Transform.Position.Y, Size.X, Size.Y), new Color(100, 100, 100, 100), 1f, 0);
             body_skel.Draw(batch);
-
 
             batch.End();
 
@@ -85,13 +106,11 @@ namespace Project
 
         private Skeleton2D body_skel;
         private Bone2D bone_torso, bone_head, bone_heands;
-        private FlipBook fb_legs;
-        private FlipBook fb_torso;
+        private FlipBook fb_legs, fb_torso, fb_head, fb_leftHeand, fb_rightHeand;
         private Animation anim_legs_walk;
         private Animation anim_torso_idle;
 
-        private Point legs_offset = new Point(0, 39);
-        private Point torso_offset = new Point(0, 23);
+        private OrthographicCamera SceneCamera;
 
         private void WalkRight(GameTime gameTime)
         {
@@ -134,6 +153,21 @@ namespace Project
         {
             anim_legs_walk.Update(gameTime);
             anim_torso_idle.Update(gameTime);
+
+            if (Math.Abs(LookAngle) > 90) 
+            {
+                fb_head.FlipHorizontally = true;
+                fb_torso.FlipHorizontally = true;
+                fb_leftHeand.FlipVertically = true;
+                fb_rightHeand.FlipVertically = true;
+            }
+            else 
+            {
+                fb_head.FlipHorizontally = false;
+                fb_torso.FlipHorizontally = false;
+                fb_leftHeand.FlipVertically = false;
+                fb_rightHeand.FlipVertically = false;
+            }
 
             if (!IsAirborne)
             {

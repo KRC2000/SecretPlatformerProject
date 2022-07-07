@@ -37,6 +37,26 @@ namespace Project
             if (targetBone != null) targetBone.Rotate(degrees);
         }
 
+        public void RotateBone(Bone2D bone, float degrees)
+        {
+            foreach (Bone2D bon in Bones)
+            {
+                if (bon == bone) bone.Rotate(degrees);
+            }
+        }
+
+        public void SetBoneRotation(Bone2D bone, float degrees)
+        {
+            foreach (Bone2D bon in Bones)
+            {
+                if (bon == bone) 
+                {
+                    float neededRotation = degrees - bone.Rotation;
+                    bone.Rotate(neededRotation);
+                }
+            }
+        }
+
         public void Draw(SpriteBatch batch, SpriteFont font = null)
         {
             foreach (Bone2D bone in Bones)
@@ -55,7 +75,18 @@ namespace Project
                 if (bone.Name == name) return bone;
             }
 
-            return null;
+            throw new System.Exception($"There is no bone with the name {name}");
+        }
+
+        public Vector2 GetBoneWorldPos(Bone2D bone)
+        {
+            return Position + bone.LocalPosition;
+        }
+
+        public Vector2 GetBoneWorldPos(string boneName)
+        {
+            Bone2D bone = GetBoneByName(boneName);
+            return Position + bone.LocalPosition;
         }
     }
 }

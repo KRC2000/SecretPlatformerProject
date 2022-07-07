@@ -49,7 +49,7 @@ namespace Project
             _camera = new OrthographicCamera(GraphicsDevice);
             _camera.Zoom = 3;
 
-            pl = new Player();
+            pl = new Player(_camera);
 
             base.Initialize();
         }
@@ -78,6 +78,7 @@ namespace Project
                 Exit();
 
             // TODO: Add your update logic here
+
 
             pl.Update(gameTime);
             map.Update();
