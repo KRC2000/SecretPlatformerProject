@@ -24,10 +24,10 @@ namespace Project
             Bones.Add(new Bone2D(name, pos, rot, lenght));
         }
 
-        public void AddBone(string name, string parentBoneName, float rot, float lenght)
+        public void AddBone(string name, string parentBoneName, float rot, float lenght, Vector2 offset = new Vector2())
         {
             Bone2D parentBone = GetBoneByName(parentBoneName);
-            Bone2D newBone = new Bone2D(name, parentBone.LocalPosition + parentBone.Vector, rot, lenght, parentBone);
+            Bone2D newBone = new Bone2D(name, parentBone.LocalPosition + parentBone.Vector, rot, lenght, parentBone, offset);
             Bones.Add(newBone);
         }
 
@@ -62,8 +62,8 @@ namespace Project
             foreach (Bone2D bone in Bones)
             {
                 batch.DrawLine(Position + bone.LocalPosition, Position + bone.LocalPosition + bone.Vector, Color.BlueViolet, 1, 0);
-                if (bone.ParentBone == null) batch.DrawCircle(new CircleF(Position + bone.LocalPosition, 4), 4, Color.Blue);
-                else batch.DrawCircle(new CircleF(Position + bone.LocalPosition, 4), 10, Color.AliceBlue);
+                if (bone.ParentBone == null) batch.DrawCircle(new CircleF(Position + bone.LocalPosition, 2), 4, Color.Blue);
+                else batch.DrawCircle(new CircleF(Position + bone.LocalPosition, 2), 10, Color.AliceBlue);
                 if (font != null) batch.DrawString(font, bone.Name, Position + bone.LocalPosition + bone.Vector / 2, Color.Black, 0f, new Vector2(), 0.5f, SpriteEffects.None, 0);
             }
         }

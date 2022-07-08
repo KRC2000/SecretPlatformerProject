@@ -30,12 +30,16 @@ namespace Project
 
             body_skel = new Skeleton2D();
             
-            body_skel.AddBone("torso", new Vector2(), -90, 18);
-            body_skel.AddBone("head", "torso", -90, 7);
+            body_skel.AddBone("torso", new Vector2(), -90, 16);
+            body_skel.AddBone("neck", "torso", -90, 2);
+            body_skel.AddBone("head", "neck", -90, 7);
             body_skel.AddBone("hands", "torso", 0, 10);
+            body_skel.AddBone("gun", "hands", 0, 5, new Vector2(0, -20));
             bone_torso = body_skel.GetBoneByName("torso");
+            bone_neck = body_skel.GetBoneByName("neck");
             bone_head = body_skel.GetBoneByName("head"); //bone_head.InheritRotation = false;
             bone_hands = body_skel.GetBoneByName("hands");
+            bone_gun = body_skel.GetBoneByName("gun");
 
 
             fb_head = new FlipBook(content.Load<Texture2D>("head"), new Point(32, 32), 1, new Vector2(32 / 2, 20));
@@ -43,6 +47,7 @@ namespace Project
             fb_legs = new FlipBook(content.Load<Texture2D>("legs_walk"), new Point(32, 32), 6, new Vector2(32 / 2 , 8));
             fb_leftHand = new FlipBook(content.Load<Texture2D>("hand_left"), new Point(32, 32), 1, new Vector2(32 / 2 - 2, 32 / 2));
             fb_rightHand = new FlipBook(content.Load<Texture2D>("hand_right"), new Point(32, 32), 1, new Vector2(32 / 2 - 2 , 32 / 2));
+            fb_pistol = new FlipBook(content.Load<Texture2D>("pistol"), new Point(32, 32), 1, new Vector2(32 / 2 - 5, 32 / 2 + 1));
             
             anim_legs_walk = new Animation(fb_legs);
             anim_torso_idle = new Animation(fb_torso);
@@ -86,13 +91,14 @@ namespace Project
         {
             batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetViewMatrix());
 
-            batch.Draw(fb_leftHand.Texture, body_skel.GetBoneWorldPos(bone_torso) + bone_torso.Vector * 0.8f, fb_leftHand.GetSourceRectangle(), Color.White, bone_hands.GetDrawRotation(), fb_leftHand.FrameOrigin , new Vector2(1, 1), fb_leftHand.GetSpriteEffects(), 0);
+            batch.Draw(fb_leftHand.Texture, body_skel.GetBoneWorldPos(bone_neck), fb_leftHand.GetSourceRectangle(), Color.White, bone_hands.GetDrawRotation(), fb_leftHand.FrameOrigin , new Vector2(1, 1), fb_leftHand.GetSpriteEffects(), 0);
             batch.Draw(fb_torso.Texture, body_skel.GetBoneWorldPos(bone_torso), fb_torso.GetSourceRectangle(), Color.White, bone_torso.GetDrawRotation(), fb_torso.FrameOrigin, new Vector2(1, 1), anim_torso_idle.FlipBook.GetSpriteEffects(), 0);
+            batch.Draw(fb_pistol.Texture, body_skel.GetBoneWorldPos(bone_gun), fb_pistol.GetSourceRectangle(), Color.White, bone_gun.GetDrawRotation(), fb_pistol.FrameOrigin, new Vector2(1, 1), fb_pistol.GetSpriteEffects(), 0);
             batch.Draw(fb_legs.Texture, body_skel.GetBoneWorldPos(bone_torso), fb_legs.GetSourceRectangle(), Color.White, 0f, fb_legs.FrameOrigin, new Vector2(1, 1), anim_legs_walk.FlipBook.GetSpriteEffects(), 0);
             batch.Draw(fb_head.Texture, body_skel.GetBoneWorldPos(bone_head), fb_head.GetSourceRectangle(), Color.White, bone_head.GetDrawRotation(), fb_head.FrameOrigin , new Vector2(1, 1), fb_head.GetSpriteEffects(), 0);
-            batch.Draw(fb_rightHand.Texture, body_skel.GetBoneWorldPos(bone_torso) + bone_torso.Vector * 0.8f, fb_rightHand.GetSourceRectangle(), Color.White, bone_hands.GetDrawRotation(), fb_rightHand.FrameOrigin , new Vector2(1, 1), fb_rightHand.GetSpriteEffects(), 0);
+            batch.Draw(fb_rightHand.Texture, body_skel.GetBoneWorldPos(bone_neck), fb_rightHand.GetSourceRectangle(), Color.White, bone_hands.GetDrawRotation(), fb_rightHand.FrameOrigin , new Vector2(1, 1), fb_rightHand.GetSpriteEffects(), 0);
             batch.DrawRectangle(new RectangleF(Transform.Position.X, Transform.Position.Y, Size.X, Size.Y), new Color(100, 100, 100, 100), 1f, 0);
-            body_skel.Draw(batch);
+            //body_skel.Draw(batch);
 
             batch.End();
 
@@ -105,8 +111,8 @@ namespace Project
         }
 
         private Skeleton2D body_skel;
-        private Bone2D bone_torso, bone_head, bone_hands;
-        private FlipBook fb_legs, fb_torso, fb_head, fb_leftHand, fb_rightHand;
+        private Bone2D bone_torso, bone_head, bone_hands, bone_gun, bone_neck;
+        private FlipBook fb_legs, fb_torso, fb_head, fb_leftHand, fb_rightHand, fb_pistol;
         private Animation anim_legs_walk;
         private Animation anim_torso_idle;
 
