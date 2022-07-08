@@ -47,7 +47,7 @@ namespace Project
             fb_legs = new FlipBook(content.Load<Texture2D>("legs_walk"), new Point(32, 32), 6, new Vector2(32 / 2 , 8));
             fb_leftHand = new FlipBook(content.Load<Texture2D>("hand_left"), new Point(32, 32), 1, new Vector2(32 / 2 - 2, 32 / 2));
             fb_rightHand = new FlipBook(content.Load<Texture2D>("hand_right"), new Point(32, 32), 1, new Vector2(32 / 2 - 2 , 32 / 2));
-            fb_pistol = new FlipBook(content.Load<Texture2D>("pistol"), new Point(32, 32), 1, new Vector2(32 / 2 - 5, 32 / 2 + 1));
+            fb_pistol = new FlipBook(content.Load<Texture2D>("pistol"), new Point(32, 32), 1, new Vector2(32 / 2 - 5, 32 / 2));
             
             anim_legs_walk = new Animation(fb_legs);
             anim_torso_idle = new Animation(fb_torso);
@@ -94,7 +94,7 @@ namespace Project
             batch.Draw(fb_leftHand.Texture, body_skel.GetBoneWorldPos(bone_neck), fb_leftHand.GetSourceRectangle(), Color.White, bone_hands.GetDrawRotation(), fb_leftHand.FrameOrigin , new Vector2(1, 1), fb_leftHand.GetSpriteEffects(), 0);
             batch.Draw(fb_torso.Texture, body_skel.GetBoneWorldPos(bone_torso), fb_torso.GetSourceRectangle(), Color.White, bone_torso.GetDrawRotation(), fb_torso.FrameOrigin, new Vector2(1, 1), anim_torso_idle.FlipBook.GetSpriteEffects(), 0);
             batch.Draw(fb_pistol.Texture, body_skel.GetBoneWorldPos(bone_gun), fb_pistol.GetSourceRectangle(), Color.White, bone_gun.GetDrawRotation(), fb_pistol.FrameOrigin, new Vector2(1, 1), fb_pistol.GetSpriteEffects(), 0);
-            batch.Draw(fb_legs.Texture, body_skel.GetBoneWorldPos(bone_torso), fb_legs.GetSourceRectangle(), Color.White, 0f, fb_legs.FrameOrigin, new Vector2(1, 1), anim_legs_walk.FlipBook.GetSpriteEffects(), 0);
+            batch.Draw(fb_legs.Texture, body_skel.GetBoneWorldPos(bone_torso), fb_legs.GetSourceRectangle(), Color.White, 0f, fb_legs.FrameOrigin, new Vector2(1, 1), fb_legs.GetSpriteEffects(), 0);
             batch.Draw(fb_head.Texture, body_skel.GetBoneWorldPos(bone_head), fb_head.GetSourceRectangle(), Color.White, bone_head.GetDrawRotation(), fb_head.FrameOrigin , new Vector2(1, 1), fb_head.GetSpriteEffects(), 0);
             batch.Draw(fb_rightHand.Texture, body_skel.GetBoneWorldPos(bone_neck), fb_rightHand.GetSourceRectangle(), Color.White, bone_hands.GetDrawRotation(), fb_rightHand.FrameOrigin , new Vector2(1, 1), fb_rightHand.GetSpriteEffects(), 0);
             batch.DrawRectangle(new RectangleF(Transform.Position.X, Transform.Position.Y, Size.X, Size.Y), new Color(100, 100, 100, 100), 1f, 0);
@@ -166,6 +166,7 @@ namespace Project
                 fb_torso.FlipHorizontally = true;
                 fb_leftHand.FlipVertically = true;
                 fb_rightHand.FlipVertically = true;
+                fb_pistol.FlipVertically = true;
             }
             else 
             {
@@ -173,6 +174,7 @@ namespace Project
                 fb_torso.FlipHorizontally = false;
                 fb_leftHand.FlipVertically = false;
                 fb_rightHand.FlipVertically = false;
+                fb_pistol.FlipVertically = false;
             }
 
             if (!IsAirborne)
