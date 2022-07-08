@@ -25,7 +25,6 @@ namespace Project
 
         public void LoadContent(ContentManager content)
         {
-            //Texture = content.Load<Texture2D>("character");
             Size = new Point(32, 64);
 
             body_skel = new Skeleton2D();
@@ -57,7 +56,7 @@ namespace Project
             anim_torso_idle.Play();
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             Animate(gameTime);
             //body_skel.Position = Transform.Position;
@@ -85,9 +84,8 @@ namespace Project
 
             UpdateFrictionApplianceStatus(gameTime);
 
-            base.Update(gameTime);
         }
-        public override void Draw(SpriteBatch batch, OrthographicCamera camera)
+        public void Draw(SpriteBatch batch, OrthographicCamera camera)
         {
             batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetViewMatrix());
 
@@ -98,7 +96,7 @@ namespace Project
             batch.Draw(fb_head.Texture, body_skel.GetBoneWorldPos(bone_head), fb_head.GetSourceRectangle(), Color.White, bone_head.GetDrawRotation(), fb_head.FrameOrigin , new Vector2(1, 1), fb_head.GetSpriteEffects(), 0);
             batch.Draw(fb_rightHand.Texture, body_skel.GetBoneWorldPos(bone_neck), fb_rightHand.GetSourceRectangle(), Color.White, bone_hands.GetDrawRotation(), fb_rightHand.FrameOrigin , new Vector2(1, 1), fb_rightHand.GetSpriteEffects(), 0);
             batch.DrawRectangle(new RectangleF(Transform.Position.X, Transform.Position.Y, Size.X, Size.Y), new Color(100, 100, 100, 100), 1f, 0);
-            //body_skel.Draw(batch);
+            body_skel.Draw(batch);
 
             batch.End();
 

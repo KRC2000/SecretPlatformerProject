@@ -21,12 +21,6 @@ namespace Project
         public Vector2 RightSensor { get; protected set; } = new Vector2();
         public bool ShouldFrictionBeApplyed = true;
 
-        public virtual void Update(GameTime gameTime)
-        {
-        }
-
-        public abstract void Draw(SpriteBatch batch, OrthographicCamera camera);
-
         public void UpdatePixelSensorsPos()
         {
             GroundUpperSensor = Transform.Position + new Vector2(Size.X / 2, Size.Y - 1);
