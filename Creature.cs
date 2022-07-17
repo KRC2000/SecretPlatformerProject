@@ -6,14 +6,13 @@ using MonoGame.Extended;
 
 namespace Project
 {
-    abstract class Humanoid : Actor
+    public abstract class Creature : Actor, IUpdatable, IContentOwner, IDrawable
     {
         public float MaxMovementSpeed { get; private set; } = 50;
         public float WalkAcceleration { get; private set; } = 400;
-        public Vector2 LookVector { get; private set; }
-        public float LookAngle { get; private set; }
 
-        public abstract void LoadContent(ContentManager content);
+        public abstract void LoadContent(ContentManager content); 
+        public abstract void Update(GameTime gameTime);
         public abstract void Draw(SpriteBatch batch, OrthographicCamera camera);
     }
 }

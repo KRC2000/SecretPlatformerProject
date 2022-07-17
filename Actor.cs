@@ -12,10 +12,10 @@ namespace Project
         public Transform2 Transform = new Transform2();
 
         //public Texture2D Texture { get; protected set; }
-
         public Point Size { get; protected set; }
 
         public Vector2 GroundUpperSensor { get; protected set; } = new Vector2();
+
         public Vector2 GroundLowerSensor { get; protected set; } = new Vector2();
         public Vector2 LeftSensor { get; protected set; } = new Vector2();
         public Vector2 RightSensor { get; protected set; } = new Vector2();

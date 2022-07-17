@@ -5,6 +5,11 @@ using Microsoft.Xna.Framework;
 
 namespace Project
 {
+    struct FrameSequence
+    {
+        Vector2 firstFrameOffset; 
+    }
+
     class FlipBook
     {
         public Texture2D Texture { get; private set; }
@@ -31,11 +36,11 @@ namespace Project
         }
 
 
-        public FlipBook(Texture2D texture, Point frameSize, int frameCount, Vector2 frameOrigin, bool flipHorizontally = false)
+        public FlipBook(Texture2D texture, Point frameSize, Vector2 frameOrigin, bool flipHorizontally = false)
         {
             Texture = texture;
             FrameSize = frameSize;
-            FrameCount = frameCount;
+            FrameCount = (texture.Width / frameSize.X) * (texture.Height / frameSize.Y);
             FlipHorizontally = flipHorizontally;
             FrameOrigin = frameOrigin;
         }
