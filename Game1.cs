@@ -25,6 +25,7 @@ namespace Project
         private Map map = new Map();
 
         private Player pl;
+        private Creature z;
 
         public Game1()
         {
@@ -61,7 +62,10 @@ namespace Project
             DebugUI.Font = Content.Load<SpriteFont>("Font1");
             DefaultFont = Content.Load<SpriteFont>("Font1");
 
+            z = new Zombie();
+
             pl.LoadContent(Content);
+            z.LoadContent(Content);
 
             map.AddChunk(Content.Load<Texture2D>("map"), new Point(0, 0));
             map.AddChunk(Content.Load<Texture2D>("map1"), new Point(800, 0));
@@ -79,10 +83,15 @@ namespace Project
 
             // TODO: Add your update logic here
 
+            
+
 
             pl.Update(gameTime);
+            z.Update(gameTime);
             map.Update();
+
             InteractionManager.ActorMap_collsion(pl, map, gameTime);
+            InteractionManager.ActorMap_collsion(z, map, gameTime);
 
             _camera.LookAt(pl.Transform.Position);
 
@@ -97,6 +106,7 @@ namespace Project
             
             map.Draw(_spriteBatch, _camera);
             pl.Draw(_spriteBatch, _camera);
+            z.Draw(_spriteBatch, _camera);
 
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, _camera.GetViewMatrix());
 

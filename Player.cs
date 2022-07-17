@@ -68,8 +68,6 @@ namespace Project
 
             skel_main.SetBoneRotation(bone_hands, LookAngle);
 
-
-
             if (Keyboard.GetState().IsKeyDown(Keys.D)){
                 WalkRight(gameTime);
             }
@@ -78,6 +76,7 @@ namespace Project
                 WalkLeft(gameTime);
             }
 
+            UpdateInputStatus();
             UpdateFrictionApplianceStatus(gameTime);
 
         }
@@ -135,10 +134,15 @@ namespace Project
             }
         }
 
+        private void UpdateInputStatus()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.D) || Keyboard.GetState().IsKeyDown(Keys.A)) IsReceivingInput = true;
+            else IsReceivingInput = false;
+        }
+
         private void UpdateFrictionApplianceStatus(GameTime gameTime)
         {
-            if ((Keyboard.GetState().IsKeyDown(Keys.A) || Keyboard.GetState().IsKeyDown(Keys.D))
-            && Math.Abs(Velocity.X) * gameTime.GetElapsedSeconds() <= MaxMovementSpeed * gameTime.GetElapsedSeconds())
+            if (IsReceivingInput && Math.Abs(Velocity.X) * gameTime.GetElapsedSeconds() <= MaxMovementSpeed * gameTime.GetElapsedSeconds())
             {
                 ShouldFrictionBeApplyed = false;
             }
