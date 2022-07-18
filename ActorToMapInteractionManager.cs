@@ -5,9 +5,9 @@ using MonoGame.Extended;
 
 namespace Project
 {
-    class InteractionManager
+    class ActorToMapInteractionManager
     {
-        public static void ActorMap_collsion(Actor actor, Map map, GameTime gameTime)
+        public static void ActorToMap_collision(Actor actor, Map map, GameTime gameTime)
         {
             // apply gravity
             actor.Velocity.Y += map.Gravity * gameTime.GetElapsedSeconds();

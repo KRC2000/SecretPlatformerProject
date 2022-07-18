@@ -10,7 +10,7 @@ using MonoGame.Extended.Input;
 
 namespace Project
 {
-    public class Zombie : Creature
+    public class Zombie : Creature, IMobile
     {
         public Vector2 LookUnitVector { get; private set; }
         public float LookAngle { get; private set; }
@@ -67,7 +67,7 @@ namespace Project
             input_TravelRight = true;
         }
 
-        public void Stop()
+        public void StopMoving()
         {
             input_TravelLeft = false;
             input_TravelRight = false;

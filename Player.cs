@@ -6,11 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using MonoGame.Extended;
-using MonoGame.Extended.Input;
 
 namespace Project
 {
-    public class Player : Creature
+    public class Player : Creature, IMobile
     {
         public Vector2 LookUnitVector { get; private set; }
         public float LookAngle { get; private set; }
@@ -69,17 +68,36 @@ namespace Project
             skel_main.SetBoneRotation(bone_hands, LookAngle);
 
             if (Keyboard.GetState().IsKeyDown(Keys.D)){
-                WalkRight(gameTime);
-            }
+                input_TravelRight = true;
+            } else input_TravelRight = false;
             
             if (Keyboard.GetState().IsKeyDown(Keys.A)){
-                WalkLeft(gameTime);
-            }
+                input_TravelLeft = true;
+            } else input_TravelLeft = false;
+
+            if (input_TravelLeft) WalkLeft(gameTime);
+            if (input_TravelRight) WalkRight(gameTime);
 
             UpdateInputStatus();
             UpdateFrictionApplianceStatus(gameTime);
 
         }
+        public void GoLeft()
+        {
+            input_TravelLeft = true;
+        }
+
+        public void GoRight()
+        {
+            input_TravelRight = true;
+        }
+
+        public void StopMoving()
+        {
+            input_TravelLeft = false;
+            input_TravelRight = false;
+        }
+
         public override void Draw(SpriteBatch batch, OrthographicCamera camera)
         {
             batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetViewMatrix());
@@ -102,6 +120,8 @@ namespace Project
             DebugUI.DrawDebug<float>(batch, "Velocity.Y: ", Velocity.Y, 4);
             DebugUI.DrawDebug<bool>(batch, "ShouldFrictionBeApplyed: ", ShouldFrictionBeApplyed, 6);
         }
+
+        private bool input_TravelLeft, input_TravelRight;
 
         private Skeleton2D skel_main;
         private Bone2D bone_torso, bone_head, bone_hands, bone_legs, bone_gun, bone_neck;
@@ -193,5 +213,6 @@ namespace Project
             if (Velocity.X > 0) anim_legs_walk.FlipBook.FlipHorizontally = false;
             else if (Velocity.X < 0) anim_legs_walk.FlipBook.FlipHorizontally = true;
         }
+
     }
 }

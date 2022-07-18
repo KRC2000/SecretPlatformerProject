@@ -90,8 +90,8 @@ namespace Project
             z.Update(gameTime);
             map.Update();
 
-            InteractionManager.ActorMap_collsion(pl, map, gameTime);
-            InteractionManager.ActorMap_collsion(z, map, gameTime);
+            ActorToMapInteractionManager.ActorToMap_collision(pl, map, gameTime);
+            ActorToMapInteractionManager.ActorToMap_collision(z, map, gameTime);
 
             _camera.LookAt(pl.Transform.Position);
 
